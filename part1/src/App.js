@@ -1,5 +1,25 @@
 import React, { useState } from "react";
 
+const ClickButton = ({ good, neutral, bad, clickGFeedBack }) => {
+  return (
+    <div>
+      <button onClick={clickGFeedBack(good, "good")}>Good</button>
+      <button onClick={clickGFeedBack(neutral, "neutral")}>Neutral</button>
+      <button onClick={clickGFeedBack(bad, "bad")}>Bad</button>
+    </div>
+  );
+};
+
+const Calculate = ({ good, neutral, bad }) => {
+  return (
+    <div>
+      <p>All {good + neutral + bad}</p>
+      <p>Average {(good - bad) / (good + neutral + bad)}</p>
+      <p>Positive {(good / (good + neutral + bad)) * 100} % </p>
+    </div>
+  );
+};
+
 const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -16,14 +36,18 @@ const App = () => {
   return (
     <div>
       <h1>Give feedback</h1>
-      <button onClick={clickGFeedBack(good, "good")}>Good</button>
-      <button onClick={clickGFeedBack(neutral, "neutral")}>Neutral</button>
-      <button onClick={clickGFeedBack(bad, "bad")}>Bad</button>
+      <ClickButton
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        clickGFeedBack={clickGFeedBack}
+      />
 
-      <h4>Statictics</h4>
+      <h3>Statictics</h3>
       <p>Good {good}</p>
       <p>Neutral {neutral}</p>
       <p>Bad {bad}</p>
+      <Calculate good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
