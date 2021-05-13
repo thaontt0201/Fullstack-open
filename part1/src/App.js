@@ -1,59 +1,57 @@
 import React, { useState } from "react";
 
-const Button = ({ good, neutral, bad, clickGFeedBack }) => {
-  return (
-    <div>
-      <button onClick={clickGFeedBack(good, "good")}>Good</button>
-      <button onClick={clickGFeedBack(neutral, "neutral")}>Neutral</button>
-      <button onClick={clickGFeedBack(bad, "bad")}>Bad</button>
-    </div>
-  );
-};
-
-const Statistics = ({ good, neutral, bad }) => {
-  if (good + neutral + bad === 0) {
-    return (
-      <div>
-        <p>No feedback given</p>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <h3>Statictics</h3>
-      <p>Good {good}</p>
-      <p>Neutral {neutral}</p>
-      <p>Bad {bad}</p>
-      <p>All {good + neutral + bad}</p>
-      <p>Average {(good - bad) / (good + neutral + bad)}</p>
-      <p>Positive {(good / (good + neutral + bad)) * 100} % </p>
-    </div>
-  );
-};
-
 const App = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
-  const clickGFeedBack = (value, type) => () => {
-    if (type === "good") {
-      setGood(value + 1);
-    } else if (type === "neutral") {
-      setNeutral(value + 1);
-    } else {
-      setBad(value + 1);
-    }
+  const anecdotes = [
+    "If it hurts, do it more often",
+    "Adding manpower to a late software project makes it later!",
+    "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+    "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+    "Premature optimization is the root of all evil.",
+    "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+  ];
+
+  const [selected, setSelected] = useState(0);
+  const [voted, setVoted] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+  const [max, setMax] = useState(0);
+
+  const nextButton = () => {
+    setSelected(selected + 1);
   };
+  const voteButton = () => {
+    setVoted({ ...voted, [selected]: voted[selected] + 1 });
+    let maximum = 0;
+    let maxKey = 0;
+    for (let key of Object.keys(voted)) {
+      if (voted[key] > maximum) {
+        maximum = voted[key];
+        maxKey = key;
+      }
+    }
+    setMax(maxKey);
+  };
+
+  console.log(max);
+  const Hottest = () => {
+    let maximum = 0;
+    let maxKey = 0;
+    for (let key of Object.keys(voted)) {
+      if (voted[key] > maximum) {
+        maximum = voted[key];
+        maxKey = key;
+      }
+    }
+    setMax(maxKey);
+  };
+
   return (
     <div>
-      <h1>Give feedback</h1>
-      <Button
-        good={good}
-        neutral={neutral}
-        bad={bad}
-        clickGFeedBack={clickGFeedBack}
-      />
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      <p> {anecdotes[selected]} </p>
+      <p>Has {voted[selected]} votes</p>
+      <button onClick={voteButton}>vote</button>
+      <button onClick={nextButton}>next anecdote</button>
+      <h1>Most votes</h1>
+      <p>{anecdotes[max]}</p>
+      <p>{voted[max]}</p>
     </div>
   );
 };
