@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Course from "./components/Course";
+import Total from "./components/Total";
 
 const App = () => {
   const course = {
@@ -24,7 +25,12 @@ const App = () => {
     ],
   };
 
-  return <Course course={course} />;
+  return (
+    <div>
+      <Course course={course} />
+      <Total course={course} />
+    </div>
+  );
 };
 
 export default App;
