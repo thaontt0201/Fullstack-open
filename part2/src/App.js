@@ -7,8 +7,12 @@ const App = () => {
   const addContact = (e) => {
     e.preventDefault();
     console.log("saved", e.target);
-    setPersons([...persons, { name: newName }]);
     setNewName("");
+    const existed = persons.some((person) => person.name === newName);
+    if (existed === true) {
+      return window.alert(`${newName} is already added to the phonebook`);
+    }
+    setPersons([...persons, { name: newName }]);
   };
 
   const handleNameChange = (e) => {
