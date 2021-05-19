@@ -7,7 +7,7 @@ import axios from "axios";
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [findName, setFindName] = useState([]);
-  const [showAll, setShowAll] = useState(false);
+  const [country, setCountry] = useState(null);
 
   useEffect(() => {
     axios.get("https://restcountries.eu/rest/v2/all").then((respone) => {
@@ -24,12 +24,22 @@ const App = () => {
       return setFindName([]);
     }
     setFindName(correctName);
+    setCountry(null);
+  };
+
+  const clickShow = (isName) => {
+    setCountry(isName);
   };
 
   return (
     <div>
       <h2>Country</h2>
-      <Search handleFindName={handleFindName} findName={findName} />
+      <Search
+        handleFindName={handleFindName}
+        findName={findName}
+        clickShow={clickShow}
+        country={country}
+      />
     </div>
   );
 };
