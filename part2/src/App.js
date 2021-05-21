@@ -3,6 +3,7 @@ import Contact from "./components/Contact";
 import Form from "./components/Form";
 import Search from "./components/Search";
 import axios from "axios";
+import contactService from "./services/contacts";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,21 +12,29 @@ const App = () => {
   const [findName, setFindName] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((respone) => {
-      setPersons(respone.data);
+    contactService.getAll().then((initialContacts) => {
+      setPersons(initialContacts);
     });
   }, []);
 
   const addContact = (e) => {
     e.preventDefault();
     console.log("saved", e.target);
-    setNewName("");
-    setNewNumber("");
+    const addPerson = {
+      name: newName,
+      number: newNumber,
+      id: persons.length + 1,
+    };
+
     const existed = persons.some((person) => person.name === newName);
     if (existed === true) {
       return window.alert(`${newName} is already added to the phonebook`);
     }
-    setPersons([...persons, { name: newName, number: newNumber }]);
+    contactService.createContact(addPerson).then((returnedContact) => {
+      setPersons([...persons, returnedContact]);
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleNameChange = (e) => {
