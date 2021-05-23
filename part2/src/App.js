@@ -57,6 +57,20 @@ const App = () => {
     setFindName(correctName);
   };
 
+  const deleteContact = (id) => {
+    const urlDelete = `http://localhost:3001/persons/${id}`;
+    const contact = persons.find((n) => n.id === id);
+    const noDelete = persons.filter((n) => n.id !== id);
+    console.log(contact.name);
+    if (window.confirm(`Are you sure you want to delete ${contact.name}?`)) {
+      axios
+        .delete(urlDelete)
+        .then(() => setPersons(persons.filter((n) => n.id !== id)));
+    } else {
+      console.log("cancelled");
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -68,7 +82,11 @@ const App = () => {
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
       />
-      <Contact persons={persons} />
+      <Contact
+        persons={persons}
+        deleteContact={deleteContact}
+        key={persons.id}
+      />
     </div>
   );
 };
