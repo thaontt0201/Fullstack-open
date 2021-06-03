@@ -4,12 +4,14 @@ import Form from "./components/Form";
 import Search from "./components/Search";
 import axios from "axios";
 import contactService from "./services/contacts";
+import Notification from "./components/Noti";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [findName, setFindName] = useState([]);
+  const [notiMessage, setNotiMessage] = useState(null);
 
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
@@ -23,7 +25,7 @@ const App = () => {
     const addPerson = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      // id: Math.floor(Math.random() * 99),
     };
 
     const existed = persons.some((person) => person.name === newName);
@@ -34,6 +36,10 @@ const App = () => {
       setPersons([...persons, returnedContact]);
       setNewName("");
       setNewNumber("");
+      setNotiMessage(`Added ${addPerson.name}`);
+      setTimeout(() => {
+        setNotiMessage(null);
+      }, 2000);
     });
   };
 
@@ -75,6 +81,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Search handleFindName={handleFindName} findName={findName} />
+      <Notification message={notiMessage} />
       <Form
         addContact={addContact}
         newName={newName}
