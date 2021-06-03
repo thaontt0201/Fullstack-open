@@ -33,6 +33,7 @@ const App = () => {
       return window.alert(`${newName} is already added to the phonebook`);
     }
     contactService.createContact(addPerson).then((returnedContact) => {
+      console.log("test", returnedContact);
       setPersons([...persons, returnedContact]);
       setNewName("");
       setNewNumber("");
@@ -64,7 +65,7 @@ const App = () => {
   };
 
   const deleteContact = (id) => {
-    const urlDelete = `http://localhost:3001/persons/${id}`;
+    const urlDelete = `http://localhost:3001/api/persons/${id}`;
     const contact = persons.find((n) => n.id === id);
     const noDelete = persons.filter((n) => n.id !== id);
     console.log(contact.name);
