@@ -29,7 +29,8 @@ if (process.argv.length < 4) {
   Contact.find({}).then((result) => {
     console.log("Phonebook: ");
     result.forEach((contact) => {
-      console.log(`${contact.name} ${contact.number}`);
+      //   console.log(`${contact.name} ${contact.number}`);
+      console.log(contact);
     });
     mongoose.connection.close();
   });
