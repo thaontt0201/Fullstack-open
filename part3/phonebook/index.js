@@ -29,29 +29,6 @@ app.use(
 );
 app.use(cors());
 
-// let persons = [
-//   {
-//     name: "Arto Hellas",
-//     number: "040-123456",
-//     id: 1,
-//   },
-//   {
-//     name: "Ada Lovelace",
-//     number: "39-44-5323523",
-//     id: 2,
-//   },
-//   {
-//     name: "Dan Abramov",
-//     number: "12-43-234345",
-//     id: 3,
-//   },
-//   {
-//     name: "Mary Poppendieck",
-//     number: "39-23-6423122",
-//     id: 4,
-//   },
-// ];
-
 app.get("/", (req, res) => {
   res.send("hello");
 });
@@ -73,19 +50,25 @@ app.get("/api/info", (req, res) => {
   });
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
   const id = req.params.id;
-  Contact.findById(id).then((contact) => {
-    if (!contact) {
-      return res.status(404).send("not found");
-    }
-    res.send(contact);
-  });
+  Contact.findById(id)
+    .then((contact) => {
+      if (!contact) {
+        return res.status(404).send("not found");
+      }
+      res.send(contact);
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
-app.delete("/api/persons/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res, next) => {
   const id = req.params.id.toString();
-  Contact.findByIdAndDelete(id).then(() => res.status(204).end());
+  Contact.findByIdAndDelete(id)
+    .then(() => res.status(204).end())
+    .catch((error) => next(error));
 });
 
 app.post("/api/persons", (req, res) => {
@@ -108,6 +91,27 @@ app.post("/api/persons", (req, res) => {
   });
 });
 
+app.put("/api/persons", (req, res) => {
+  const editperson = req.body;
+  console.log(editperson);
+  Contact.findOneAndUpdate(
+    { name: editperson.name },
+    { number: editperson.number },
+    { new: true }
+  ).then((results) => {
+    console.log("update result", results);
+    res.send(results);
+  });
+});
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message);
+  if (error.name === "CastError") {
+    return res.status(400).send({ error: "malformatted id" });
+  }
+  next((error) => next(error));
+};
+app.use(errorHandler);
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`listening on ${port}`);
