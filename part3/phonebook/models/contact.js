@@ -2,8 +2,17 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const personSchema = new mongoose.Schema({
-  name: { type: String, unique: true, require: true },
-  number: { type: Number, require: true },
+  name: {
+    type: String,
+    minLength: [3, "at least 3 characters"],
+    unique: true,
+    required: true,
+  },
+  number: {
+    type: String,
+    minLength: [8, "enter atleast 8 digits"],
+    required: true,
+  },
 });
 personSchema.plugin(uniqueValidator);
 
