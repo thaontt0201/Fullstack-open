@@ -71,24 +71,27 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const addperson = req.body;
   if (!addperson.name || !addperson.number) {
     return res.status(400).send({ error: "name or number is missing" });
   }
 
-  Contact.find({}).then((result) => {
-    if (result.some((p) => p.name === addperson.name)) {
-      return res.status(400).send({ error: "name must be unique" });
-    }
-    const contact = new Contact({
-      name: addperson.name,
-      number: addperson.number,
-    });
-    contact.save().then((saveContact) => {
-      res.send(saveContact);
-    });
+  // Contact.find({}).then((result) => {
+  //   if (result.some((p) => p.name === addperson.name)) {
+  //     return res.status(400).send({ error: "name must be unique" });
+  //   }
+  // });
+  const contact = new Contact({
+    name: addperson.name,
+    number: addperson.number,
   });
+  contact
+    .save()
+    .then((saveContact) => {
+      res.send(saveContact);
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/persons", (req, res) => {
@@ -108,8 +111,10 @@ const errorHandler = (error, req, res, next) => {
   console.error(error.message);
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).send({ error: error.message });
   }
-  next((error) => next(error));
+  next(error);
 };
 app.use(errorHandler);
 const port = process.env.PORT;
