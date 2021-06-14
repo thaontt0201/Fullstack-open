@@ -12,7 +12,12 @@ const createContact = (newContact) => {
   return request.then((response) => response.data);
 };
 
+const updateContact = (updatedContect) => {
+  const request = axios.put(url, updatedContect);
+  return request.then((response) => response.data);
+};
 export default {
   getAll,
   createContact,
+  updateContact,
 };

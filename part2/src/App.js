@@ -5,6 +5,7 @@ import Search from "./components/Search";
 import axios from "axios";
 import contactService from "./services/contacts";
 import Notification from "./components/Noti";
+import ErrorMessage from "./components/ErrorMessage";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [findName, setFindName] = useState([]);
   const [notiMessage, setNotiMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
@@ -30,18 +32,38 @@ const App = () => {
 
     const existed = persons.some((person) => person.name === newName);
     if (existed === true) {
-      return window.alert(`${newName} is already added to the phonebook`);
+      contactService.updateContact(addPerson).then((updatedNumber) => {
+        const newNumber = persons.map((person) => {
+          if (person.id === updatedNumber.id) {
+            return updatedNumber;
+          }
+          return person;
+        });
+        setPersons(newNumber);
+        setNewName("");
+        setNewNumber("");
+      });
+    } else {
+      contactService
+        .createContact(addPerson)
+        .then((returnedContact) => {
+          console.log("test", returnedContact);
+          setPersons([...persons, returnedContact]);
+          setNewName("");
+          setNewNumber("");
+          setNotiMessage(`Added ${addPerson.name}`);
+          setTimeout(() => {
+            setNotiMessage(null);
+          }, 2000);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+          setErrorMessage(err.response.data.error);
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 2000);
+        });
     }
-    contactService.createContact(addPerson).then((returnedContact) => {
-      console.log("test", returnedContact);
-      setPersons([...persons, returnedContact]);
-      setNewName("");
-      setNewNumber("");
-      setNotiMessage(`Added ${addPerson.name}`);
-      setTimeout(() => {
-        setNotiMessage(null);
-      }, 2000);
-    });
   };
 
   const handleNameChange = (e) => {
@@ -83,6 +105,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Search handleFindName={handleFindName} findName={findName} />
       <Notification message={notiMessage} />
+      <ErrorMessage message={errorMessage} />
       <Form
         addContact={addContact}
         newName={newName}
