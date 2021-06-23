@@ -1,7 +1,7 @@
-const totalLikes = require("../utils/list_helper").totalLikes;
+const favouriteBlog = require("../utils/list_helper").favouriteBlog;
 
-describe("total likes", () => {
-  const listWithOneBlog = [
+describe("favourite blog", () => {
+  const mostLike = [
     {
       _id: "5a422aa71b54a676234d17f8",
       title: "Go To Statement Considered Harmful",
@@ -19,9 +19,15 @@ describe("total likes", () => {
       __v: 0,
     },
   ];
-
-  test("when list has only one blog, equals the likes of that", () => {
-    const result = totalLikes(listWithOneBlog);
-    expect(result).toBe(13);
+  test("the most favourite blog", () => {
+    const result = favouriteBlog(mostLike);
+    expect(result).toEqual({
+      _id: "60d1d7efb5dd401554574821",
+      title: "ABCD",
+      author: "Phong",
+      url: "Phongb@gmail.com",
+      likes: 8,
+      __v: 0,
+    });
   });
 });

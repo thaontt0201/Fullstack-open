@@ -8,7 +8,14 @@ const totalLikes = (blogs) => {
   }, 0);
 };
 
+const favouriteBlog = (blogs) => {
+  const likes = blogs.map((blog) => blog.likes);
+  const mostLike = Math.max(...likes);
+  return blogs.find((blog) => blog.likes === mostLike);
+};
+
 module.exports = {
   dummy,
   totalLikes,
+  favouriteBlog,
 };
