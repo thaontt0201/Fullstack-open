@@ -21,9 +21,10 @@
   },
   "devDependencies": {
     "jest": "^27.0.4",
+    "lodash": "^4.17.21",
     "nodemon": "^2.0.7"
   },
   "jest": {
-   "testEnvironment": "node"
- }
+    "testEnvironment": "node"
+  }
 }
