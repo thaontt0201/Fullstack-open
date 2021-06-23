@@ -33,9 +33,29 @@ const mostBlogs = (blogs) => {
   return arr.find((element) => element.blogs === maxBlogs);
 };
 
+const mostLikes = (blogs) => {
+  const arr = [];
+  blogs.forEach((blog) => {
+    if (arr.some((element) => element.author === blog.author)) {
+      arr.forEach((element) => {
+        if (element.author === blog.author) {
+          element.likes += blog.likes;
+        }
+      });
+    } else {
+      const obj = { author: blog.author, likes: blog.likes };
+      arr.push(obj);
+    }
+  });
+  const countLikes = arr.map((element) => element.likes);
+  const maxLikes = Math.max(...countLikes);
+  return arr.find((element) => element.likes === maxLikes);
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
   mostBlogs,
+  mostLikes,
 };
