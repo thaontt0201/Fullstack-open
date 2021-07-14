@@ -56,6 +56,21 @@ test("a blog can be added", async () => {
   expect(title).toContain("QWereInd");
 });
 
+test("blog with default like equal 0", async () => {
+  const addNewBlog = {
+    title: "ABCD",
+    author: "Thao",
+    url: "https://github1s.com/fullstack-hy/part3-notes-backend/blob/part4-4/tests/note_api.test.js",
+  };
+  const response = await api
+    .post("/api/blogs")
+    .send(addNewBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  expect(response.body.likes).toEqual(0);
+});
+
 //close the database connection after testing
 afterAll(() => {
   mongoose.connection.close();
