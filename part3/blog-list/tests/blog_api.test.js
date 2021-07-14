@@ -71,6 +71,13 @@ test("blog with default like equal 0", async () => {
   expect(response.body.likes).toEqual(0);
 });
 
+test("blog misses the title and url", async () => {
+  const addNewBlog = {
+    author: "Thao",
+    likes: 12,
+  };
+  await api.post("/api/blogs").send(addNewBlog).expect(400);
+});
 //close the database connection after testing
 afterAll(() => {
   mongoose.connection.close();
