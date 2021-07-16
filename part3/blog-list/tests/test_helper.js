@@ -7,6 +7,12 @@ const initialBlogs = [
     url: "https://fullstackopen.com/en/part4/testing_the_backend#async-await-in-the-backend",
     likes: 25,
   },
+  {
+    title: "Indie",
+    author: "Vinh",
+    url: "https://fullstackopen.com/en/part4/testing_the_backend#async-await-in-the-backend",
+    likes: 58,
+  },
 ];
 
 const blogsInDb = async () => {
