@@ -12,7 +12,7 @@ describe("when there is initially one user in db", () => {
     await User.deleteMany({});
 
     const passwordHash = await bcrypt.hash("sekret", 10);
-    const user = new User({ username: "root", passwordHash });
+    const user = new User({ username: "root", password: passwordHash });
 
     await user.save();
   });
@@ -37,5 +37,14 @@ describe("when there is initially one user in db", () => {
 
     const usernames = usersAtEnd.map((u) => u.username);
     expect(usernames).toContain(newUser.username);
+  });
+  test("creating new user with restriction", async () => {
+    const newUser = {
+      username: "Thao123",
+      name: "Thao Nguyen",
+      password: "9",
+    };
+
+    await api.post("/api/users").send(newUser).expect(400);
   });
 });
