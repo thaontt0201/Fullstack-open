@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minLength: [3, "at least 3 characters"],
+    unique: true,
   },
   name: String,
   password: {
@@ -13,6 +14,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     minLength: [3, "at least 3 characters"],
   },
+  blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
 });
 
 userSchema.plugin(uniqueValidator);
