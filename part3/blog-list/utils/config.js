@@ -7,7 +7,9 @@ const mongoUrl =
 
 const PORT = process.env.PORT;
 
+const SECRET = process.env.SECRET;
 module.exports = {
   mongoUrl,
   PORT,
+  SECRET,
 };
