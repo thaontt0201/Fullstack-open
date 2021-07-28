@@ -17,27 +17,27 @@ describe("when there is initially one user in db", () => {
     await user.save();
   });
 
-  test("creation succeeds with a fresh username", async () => {
-    const usersAtStart = await helper.usersInDb();
+  // test("creation succeeds with a fresh username", async () => {
+  //   const usersAtStart = await helper.usersInDb();
 
-    const newUser = {
-      username: "Thao123",
-      name: "Thao Nguyen",
-      password: "987456",
-    };
+  //   const newUser = {
+  //     username: "Thao123",
+  //     name: "Thao Nguyen",
+  //     password: "987456",
+  //   };
 
-    await api
-      .post("/api/users")
-      .send(newUser)
-      .expect(200)
-      .expect("Content-Type", /application\/json/);
+  //   await api
+  //     .post("/api/users")
+  //     .send(newUser)
+  //     .expect(200)
+  //     .expect("Content-Type", /application\/json/);
 
-    const usersAtEnd = await helper.usersInDb();
-    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
+  //   const usersAtEnd = await helper.usersInDb();
+  //   expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
 
-    const usernames = usersAtEnd.map((u) => u.username);
-    expect(usernames).toContain(newUser.username);
-  });
+  //   const usernames = usersAtEnd.map((u) => u.username);
+  //   expect(usernames).toContain(newUser.username);
+  // });
   test("creating new user with restriction", async () => {
     const newUser = {
       username: "Thao123",
